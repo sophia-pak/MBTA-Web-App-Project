@@ -1,69 +1,116 @@
 import os
 import json
 import urllib.request
-
+from urllib.parse import urlencode
 from dotenv import load_dotenv
 
-# Load environment variables
+
+# Load API keys from .env
 load_dotenv()
 
-# Get API keys from environment variables
-MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
 MBTA_API_KEY = os.getenv("MBTA_API_KEY")
 
-# Optional: helpful error messages if keys are missing
-if MAPBOX_TOKEN is None:
-    raise RuntimeError("MAPBOX_TOKEN is not set. Check your .env file.")
-if MBTA_API_KEY is None:
-    raise RuntimeError("MBTA_API_KEY is not set. Check your .env file.")
-
-# Useful base URLs (you need to add the appropriate parameters for each API request)
 MAPBOX_BASE_URL = "https://api.mapbox.com/search/searchbox/v1/forward"
-MBTA_BASE_URL = "https://api-v3.mbta.com/"
+MBTA_STOP_URL = "https://api-v3.mbta.com/stops"
 
 
-# A little bit of scaffolding if you want to use it
+# Helper: GET JSON from a URL
 def get_json(url: str) -> dict:
-    """
-    Given a properly formatted URL for a JSON web API request, return a Python JSON object containing the response to that request.
-
-    Both get_lat_lng() and get_nearest_station() might need to use this function.
-    """
-    pass
+    """Retrieve JSON data from a URL and return as a Python dict."""
+    with urllib.request.urlopen(url) as response:
+        data = response.read().decode("utf-8")
+        return json.loads(data)
 
 
+# Step 1: Geocode using Mapbox
 def get_lat_lng(place_name: str) -> tuple[str, str]:
     """
-    Given a place name or address, return a (latitude, longitude) tuple with the coordinates of the given place.
-
-    See https://docs.mapbox.com/api/search/search-box/#search-request for Mapbox Search API URL formatting requirements.
+    Given a place name, return (latitude, longitude) as strings.
+    Uses Mapbox forward geocoding.
     """
-    pass
+    if not MAPBOX_API_KEY:
+        raise RuntimeError("MAPBOX_TOKEN is missing. Check your .env file.")
+
+    # Build the URL properly
+    params = {
+        "q": place_name,
+        "access_token": MAPBOX_API_KEY
+    }
+
+    url = MAPBOX_BASE_URL + "?" + urlencode(params)
+
+    data = get_json(url)
+
+    try:
+        feature = data["features"][0]
+        coords = feature["geometry"]["coordinates"]  # [lon, lat]
+        lon, lat = coords[0], coords[1]
+        return str(lat), str(lon)
+
+    except (KeyError, IndexError):
+        raise ValueError(f"Could not find coordinates for '{place_name}'")
 
 
+# Step 2: MBTA API — Get nearest station
 def get_nearest_station(latitude: str, longitude: str) -> tuple[str, bool]:
     """
-    Given latitude and longitude strings, return a (station_name, wheelchair_accessible) tuple for the nearest MBTA station to the given coordinates. wheelchair_accessible is True if the stop is marked as accessible, False otherwise.
-
-    See https://api-v3.mbta.com/docs/swagger/index.html#/Stop/ApiWeb_StopController_index for URL formatting requirements for the 'GET /stops' API.
+    Given latitude and longitude, return tuple:
+    (stop_name, wheelchair_accessible)
     """
-    pass
+    if not MBTA_API_KEY:
+        raise RuntimeError("MBTA_API_KEY is missing. Check your .env file.")
+
+    params = {
+        "api_key": MBTA_API_KEY,
+        "sort": "distance",
+        "filter[latitude]": latitude,
+        "filter[longitude]": longitude,
+    }
+
+    url = MBTA_STOP_URL + "?" + urlencode(params)
+
+    data = get_json(url)
+
+    try:
+        stop = data["data"][0]
+
+        stop_name = stop["attributes"]["name"]
+        wheelchair = stop["attributes"]["wheelchair_boarding"]
+
+        # MBTA API: 1 = accessible, 2 = not accessible, 0 = unknown
+        is_accessible = (wheelchair == 1)
+
+        return stop_name, is_accessible
+
+    except (KeyError, IndexError):
+        raise ValueError("No MBTA stops found near that location.")
 
 
+# Step 3: Combined tool
 def find_stop_near(place_name: str) -> tuple[str, bool]:
     """
-    Given a place name or address, return the nearest MBTA stop and whether it is wheelchair accessible.
-
-    This function might use all the functions above.
+    Take a place name, return (nearest_stop_name, accessibility_bool)
     """
-    pass
+    lat, lon = get_lat_lng(place_name)
+    return get_nearest_station(lat, lon)
 
 
+# Testing in main()
 def main():
-    """
-    You should test all the above functions here
-    """
-    pass
+    # Test 1 — Boston Common
+    print("Testing get_lat_lng('Boston Common'):")
+    print(get_lat_lng("Boston Common"))
+
+    print("\nTesting find_stop_near('Boston Common'):")
+    print(find_stop_near("Boston Common"))
+
+    # Test 2 — Fenway Park
+    print("\nTesting get_lat_lng('Fenway Park'):")
+    print(get_lat_lng("Fenway Park"))
+
+    print("\nTesting find_stop_near('Fenway Park'):")
+    print(find_stop_near("Fenway Park"))
 
 
 if __name__ == "__main__":
