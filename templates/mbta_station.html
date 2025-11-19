@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearest MBTA Station Result</title>
+</head>
+<body>
+    <h1>Nearest MBTA Station</h1>
+
+    <p>
+        For the location <strong>{{ place }}</strong>, the nearest MBTA station is:
+    </p>
+
+    <h2>{{ stop_name }}</h2>
+
+    {% if is_accessible %}
+        <p>This station is <strong>wheelchair accessible</strong>.</p>
+    {% else %}
+        <p>This station is <strong>not listed as wheelchair accessible</strong>.</p>
+    {% endif %}
+
+    <p>
+        <a href="{{ url_for('index') }}">Search again</a>
+    </p>
+</body>
+</html>

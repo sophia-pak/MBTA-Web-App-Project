@@ -15,6 +15,7 @@ MAPBOX_BASE_URL = "https://api.mapbox.com/search/searchbox/v1/forward"
 MBTA_STOP_URL = "https://api-v3.mbta.com/stops"
 
 
+
 # Helper: GET JSON from a URL
 def get_json(url: str) -> dict:
     """Retrieve JSON data from a URL and return as a Python dict."""
@@ -115,3 +116,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

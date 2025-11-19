@@ -8,7 +8,15 @@
   </head>
 
   <body>
-    <h1>Hi</h1>
-    <p>This is an amazing app to help you find the nearest MBTA station</p>
+    <h1>Nearest MBTA Station Finder</h1>
+    <p>Enter a place name to find the nearest MBTA station.</p>
+     {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+     <form method="POST" action="{{ url_for('nearest_mbta') }}">
+        <label for="place">Place name:</label>
+        <input type="text" id="place" name="place" placeholder="e.g. Fenway Park" required>
+        <button type="submit">Search</button>
+    </form>
   </body>
 </html>
