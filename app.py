@@ -26,12 +26,13 @@ def nearest_mbta():
         return render_template("error.html", error=error_message)
 
     try:
-        stop_name, is_accessible = find_stop_near(place)
+        stop_name, is_accessible, weather = find_stop_near(place)
         return render_template(
             "mbta_station.html",
             place=place,
             stop_name=stop_name,
             is_accessible=is_accessible,
+            weather=weather,
         )
     except Exception as e:
         # Something went wrong with API / lookup

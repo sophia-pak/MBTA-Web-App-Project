@@ -18,6 +18,12 @@
         <p>This station is <strong>not listed as wheelchair accessible</strong>.</p>
     {% endif %}
 
+    <h3>Current Weather at {{ place }}</h3>
+    <p>
+        Temperature: <strong>{{ weather.temperature }} °F</strong><br>
+        Conditions: <strong>{{ weather.description }}</strong>
+    </p>
+
     <p>
         <a href="{{ url_for('index') }}">Search again</a>
     </p>

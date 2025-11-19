@@ -89,12 +89,50 @@ def get_nearest_station(latitude: str, longitude: str) -> tuple[str, bool]:
 
 
 # Step 3: Combined tool
-def find_stop_near(place_name: str) -> tuple[str, bool]:
+def find_stop_near(place_name: str):
     """
-    Take a place name, return (nearest_stop_name, accessibility_bool)
+    Returns nearest stop info AND weather:
+    (stop_name, is_accessible, weather_dict)
     """
     lat, lon = get_lat_lng(place_name)
-    return get_nearest_station(lat, lon)
+    stop_name, is_accessible = get_nearest_station(lat, lon)
+    weather = get_weather(lat, lon)
+
+    return stop_name, is_accessible, weather
+
+# Step 4: Optional- OpenWeatherMap API to get weather info
+def get_weather(lat: str, lon: str) -> dict:
+    """
+    Given latitude and longitude, return a weather dictionary:
+    - temperature (°F)
+    - description
+    """
+    OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
+    if not OPENWEATHER_API_KEY:
+        raise RuntimeError("OPENWEATHER_API_KEY is missing. Check your .env file.")
+
+    # Build URL for OpenWeatherMap API
+    base_url = "https://api.openweathermap.org/data/2.5/weather"
+    params = {
+        "lat": lat,
+        "lon": lon,
+        "appid": OPENWEATHER_API_KEY,
+        "units": "imperial"   # Fahrenheit
+    }
+    url = base_url + "?" + urlencode(params)
+
+    data = get_json(url)
+
+    try:
+        weather_main = data["weather"][0]["description"].title()
+        temperature = data["main"]["temp"]
+        return {
+            "description": weather_main,
+            "temperature": temperature
+        }
+    except Exception:
+        raise RuntimeError("Could not retrieve weather information.")
 
 
 # Testing in main()
