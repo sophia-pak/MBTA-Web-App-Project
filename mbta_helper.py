@@ -10,9 +10,11 @@ load_dotenv()
 
 MAPBOX_API_KEY = os.getenv("MAPBOX_API_KEY")
 MBTA_API_KEY = os.getenv("MBTA_API_KEY")
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 MAPBOX_BASE_URL = "https://api.mapbox.com/search/searchbox/v1/forward"
 MBTA_STOP_URL = "https://api-v3.mbta.com/stops"
+OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 
 
