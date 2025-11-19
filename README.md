@@ -22,3 +22,7 @@ This project was completed by Jack Regan and Sophia Pak, who divided work based 
 ### Learning & Use of AI Tools
 
 We learned how to work with APIs, interpret JSON data, structure a Flask application, and write helper functions to keep our code modular. We used ChatGPT and ChatGPT Codex to troubleshoot errors, clarify confusing behaviors, and generate small code snippets, which made development more efficient. One limitation was the small set of suggested APIs, as we hoped to explore more options but lacked guidance on which would fit the project’s scope. Overall, the project strengthened our understanding of backend development and API integration.
+
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
