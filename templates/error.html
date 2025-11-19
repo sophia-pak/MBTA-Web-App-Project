@@ -2,14 +2,59 @@
 <html>
 <head>
     <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5fff5; /* soft white-green tint */
+            color: #0b3d0b; /* deep forest green */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #0b3d0b;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 18px;
+            background-color: #0b3d0b;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #145214;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
+
     <h1>Oops, something went wrong</h1>
 
-    <p>{{ error }}</p>
+    <div class="container">
+        <p>{{ error }}</p>
 
-    <p>
-        <a href="{{ url_for('index') }}">Back to Home</a>
-    </p>
+        <p>
+            <a href="{{ url_for('index') }}">Back to Home</a>
+        </p>
+    </div>
+
 </body>
 </html>
