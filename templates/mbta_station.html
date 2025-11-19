@@ -2,21 +2,73 @@
 <html>
 <head>
     <title>Nearest MBTA Station Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6fff6; /* soft white-green tint */
+            color: #0b3d0b; /* deep forest green */
+            margin: 0;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #0b3d0b;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0 20px;
+        }
+
+        strong {
+            color: #064f17; /* accent green */
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 20px;
+            background-color: #0b3d0b;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: 0.2s ease-in-out;
+        }
+
+        a:hover {
+            background-color: #145c14; /* lighter forest green */
+        }
+
+        /* Optional container for nicer layout */
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 12px rgba(0, 50, 0, 0.15);
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Nearest MBTA Station</h1>
+    <div class="container">
+        <h1>Nearest MBTA Station</h1>
 
-    <p>
-        For the location <strong>{{ place }}</strong>, the nearest MBTA station is:
-    </p>
+        <p>
+            For the location <strong>{{ place }}</strong>, the nearest MBTA station is:
+        </p>
 
-    <h2>{{ stop_name }}</h2>
+        <h2>{{ stop_name }}</h2>
 
-    {% if is_accessible %}
-        <p>This station is <strong>wheelchair accessible</strong>.</p>
-    {% else %}
-        <p>This station is <strong>not listed as wheelchair accessible</strong>.</p>
-    {% endif %}
+        {% if is_accessible %}
+            <p>This station is <strong>wheelchair accessible</strong>.</p>
+        {% else %}
+            <p>This station is <strong>not listed as wheelchair accessible</strong>.</p>
+        {% endif %}
 
     <h3>Current Weather at {{ place }}</h3>
     <p>

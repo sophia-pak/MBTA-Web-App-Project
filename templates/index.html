@@ -1,22 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hi</title>
-  </head>
+    <title>Landing Page - MBTA Station Finder</title>
 
-  <body>
+    <style>
+        body {
+            background-color: #f8fff8;
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #0b3d0b; /* Deep forest green text */
+            text-align: center;
+        }
+
+        h1 {
+            background-color: #0b3d0b; /* Forest green */
+            color: white;
+            padding: 20px;
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        form {
+            margin: 40px auto;
+            padding: 25px;
+            width: 320px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 50, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #0b3d0b;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 2px solid #0b3d0b;
+            border-radius: 6px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            border-color: #145214;
+            box-shadow: 0 0 5px rgba(20, 82, 20, 0.4);
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #0b3d0b; /* forest green */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background-color: #145214;
+        }
+
+        .error {
+            color: #b30000;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
     <h1>Nearest MBTA Station Finder</h1>
     <p>Enter a place name to find the nearest MBTA station.</p>
-     {% if error %}
-        <p style="color: red;">{{ error }}</p>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
     {% endif %}
-     <form method="POST" action="{{ url_for('nearest_mbta') }}">
+
+    <form method="POST" action="{{ url_for('nearest_mbta') }}">
         <label for="place">Place name:</label>
         <input type="text" id="place" name="place" placeholder="e.g. Fenway Park" required>
         <button type="submit">Search</button>
     </form>
-  </body>
+</body>
 </html>
